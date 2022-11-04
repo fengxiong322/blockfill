@@ -5,9 +5,10 @@ export const BLOCK_TYPE = {
 };
 
 export const STAGE = {
-    start: 0,
-    obstacle: 1,
-    play: 2,
-    playAgain: 3,
-    length: 4
+    intro: 0,
+    start: 1,
+    obstacle: 2,
+    play: 3,
+    playAgain: 4,
+    length: 5
 };

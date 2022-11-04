@@ -31,8 +31,8 @@ class Game {
         if(curCell.type === BLOCK_TYPE.empty){
             let head = this.board[this.selected.at(-1)];
             if ((head === undefined) ||
-                ((head.x === curCell.x+1 || head.x == curCell.x-1) && (head.y === curCell.y)) ||
-                ((head.y === curCell.y+1 || head.y == curCell.y-1) && (head.x === curCell.x))){
+                ((head.x === curCell.x+1 || head.x === curCell.x-1) && (head.y === curCell.y)) ||
+                ((head.y === curCell.y+1 || head.y === curCell.y-1) && (head.x === curCell.x))){
                 
                 curCell.type = BLOCK_TYPE.filled;
                 this.addSelected(i);
