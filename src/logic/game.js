@@ -6,7 +6,8 @@ class Game {
         this.width = size.width;
         this.height = size.height;
         this.selected = [];
-        this.board = []
+        this.board = [];
+        this.mouseDown = false;
         let index = 0;
         for (let i = 0; i < this.width; ++i) {
             for (let j = 0; j < this.height; ++j) {
@@ -20,41 +21,68 @@ class Game {
         }
     }
 
-    //Stage 1
+    updateBoard(){
+        document.dispatchEvent(new CustomEvent("UPDATE_CELLS"));
+    }
 
+    //Cell File
+    getCellType(i){
+        return this.board[i].type;
+    }
+
+    //Stage 0
     addSelected(i){
         this.selected.push(i);
     }
 
-    playCell(i){
-        let curCell = this.board[i];
-        if(curCell.type === BLOCK_TYPE.empty){
-            let head = this.board[this.selected.at(-1)];
-            if ((head === undefined) ||
-                ((head.x === curCell.x+1 || head.x === curCell.x-1) && (head.y === curCell.y)) ||
-                ((head.y === curCell.y+1 || head.y === curCell.y-1) && (head.x === curCell.x))){
-                
-                curCell.type = BLOCK_TYPE.filled;
-                this.addSelected(i);
-            }
-        }else if(this.board[i].type === BLOCK_TYPE.filled){
-            let splitIndex = this.selected.indexOf(i);
-            _.range(splitIndex+1, this.selected.length).map(val => {
-                this.board[this.selected[val]].type = BLOCK_TYPE.empty;
-            });
-            this.selected = this.selected.splice(0, splitIndex+1);
-
+    //Setting Obstacles
+    setObstacle(i){
+        if(this.mouseDown){
+            this.updateBoard();
+            this.board[i].type = BLOCK_TYPE.block;
         }
     }
 
-    setObstacle(i){
-        this.board[i].type = BLOCK_TYPE.block;
+    setRandomObstacles(numObstacles){
+        const obstacles = _.shuffle(_.range(this.width*this.height)).slice(0, numObstacles+1);
+        for(let i in obstacles.slice(0, numObstacles)){
+            console.log(obstacles[i])
+            this.board[obstacles[i]].type = BLOCK_TYPE.block;
+        }
+        this.board[obstacles[numObstacles]].type = BLOCK_TYPE.filled;
+        this.addSelected(obstacles[numObstacles])
     }
 
+    playCell(i){
+        if(this.mouseDown){
+            this.updateBoard();
+            let curCell = this.board[i];
+            if(curCell.type === BLOCK_TYPE.empty){
+                let head = this.board[this.selected.at(-1)];
+                if ((head === undefined) ||
+                    ((head.x === curCell.x+1 || head.x === curCell.x-1) && (head.y === curCell.y)) ||
+                    ((head.y === curCell.y+1 || head.y === curCell.y-1) && (head.x === curCell.x))){
+                    
+                    curCell.type = BLOCK_TYPE.filled;
+                    this.addSelected(i);
+                }
+            }else if(this.board[i].type === BLOCK_TYPE.filled){
+                let splitIndex = this.selected.indexOf(i);
+                _.range(splitIndex+1, this.selected.length).map(val => {
+                    this.board[this.selected[val]].type = BLOCK_TYPE.empty;
+                });
+                this.selected = this.selected.splice(0, splitIndex+1);
+
+            }
+        }
+    }
+
+
+
     update(i, stage){
-        if(stage === STAGE.play){
+        if(stage === STAGE.TIMED.play){
             this.playCell(i);
-        }else if(stage === STAGE.obstacle){
+        }else if(stage === STAGE.TIMED.obstacle){
             this.setObstacle(i);
         }
     }

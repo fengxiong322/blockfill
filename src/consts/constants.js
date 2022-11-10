@@ -5,10 +5,12 @@ export const BLOCK_TYPE = {
 };
 
 export const STAGE = {
-    intro: 0,
-    start: 1,
-    obstacle: 2,
-    play: 3,
-    playAgain: 4,
-    length: 5
+    TIMED: {
+        intro: 0,
+        overlay: 1,
+        start: 2,
+        end: 3,
+        repeat: 4,
+        length: 5
+    }
 };

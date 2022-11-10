@@ -1,36 +1,41 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Board from './Board.js'
+import Timer from './Timer.js'
 import IntroOverlay from './IntroOverlay.js'
-import {STAGE} from './../consts/constants'
+import { STAGE } from './../consts/constants'
 import { GameContext } from "../context/GameContext.js"
-import { set } from 'lodash';
 
-function Game(){
-    const context = React.useContext(GameContext);
+function Game() {
+  const context = React.useContext(GameContext);
 
-    React.useEffect(() => {
-        if (context.stage === STAGE.intro){
-            console.log("Introduction Phase");
-          }else if (context.stage === STAGE.start){
-            console.log("Start Game");
-            context.setSize({width: 5, height: 5});
-          }
-    }, [context.stage]);
-
-
-    const setElements = () => {
-        if (context.stage === STAGE.intro){
-          return <IntroOverlay/>
-        }else if (context.stage === STAGE.start){
-            return <Board />
-        }
+  React.useEffect(() => {
+    console.log("update");
+    console.log(context.stage)
+    if (context.stage === STAGE.TIMED.intro) {
+      console.log("Introduction Phase");
+      context.setSize({ width: 5, height: 5 });
+    } else if (context.stage === STAGE.TIMED.overlay) {
+      context.nextStage();
+    } else if (context.stage == STAGE.TIMED.start){
+      context.game.setRandomObstacles(10);
     }
+  }, [context.stage]);
 
-    return (
-      <div className="game">
-        {setElements()}
-      </div>
-    );
+
+  const setElements = () => {
+    if (context.stage === STAGE.TIMED.intro) {
+      return <IntroOverlay />
+    } else if (context.stage === STAGE.TIMED.overlay) {
+    } else if (context.stage === STAGE.TIMED.start) {
+      return <><Timer /><Board /></>
+    }
+  }
+
+  return (
+    <div className="game">
+      {setElements()}
+    </div>
+  );
 }
 
 export default Game;

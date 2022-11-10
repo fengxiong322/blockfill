@@ -1,0 +1,11 @@
+.filled {
+    background-color: red;
+}
+
+.empty {
+    background-color: gray;
+}
+
+.block {
+    background-color: black;
+}

@@ -1,20 +1,30 @@
 import React from 'react';
-import Cell from './Cell.js'
+import Cell from './CellPlay.js'
 import { GameContext } from "../context/GameContext.js"
-import { property } from 'lodash';
+import _ from 'lodash';
+import CellPlay from './CellPlay.js';
 
-
-// Super Class
 function Board(props) {
-    const context = React.useContext(GameContext);
-    return (
-      <div className="board">
-        {context.game && context.game.board.map(cur => {
-          return <Cell key = {cur.i.toString()} id={cur.i.toString()}
-           onMouseEnter = {props.mouseEnter} onMouseDown = {props.mouseDown} onMouseUp = {props.mouseUp}></Cell>
-        })}
-      </div>
-    );
-  }
-  
+  const context = React.useContext(GameContext);
+  const [update, setUpdate] = React.useState(false);
+
+  document.addEventListener("UPDATE_CELLS", (e) => {
+    setUpdate(!update);
+  });
+
+  const boardStyle = {
+    display: "inline-grid",
+    gridTemplateColumns: "repeat(" + context.size.width + ", 100px)",
+    gridTemplateRows: "repeat(" + context.size.height + ", 100px)"
+  };
+
+  return (
+    <div className="board" style={boardStyle}>
+      {context.game && context.game.board.map(cur => {
+        return <CellPlay key={cur.i.toString()} id={cur.i}/>
+      })}
+    </div>
+  );
+}
+
 export default Board;

@@ -8,9 +8,9 @@ function IntroOverlay() {
         <div className="overlay">
             <h1>Welcome to Block Fill!</h1>
             <p><strong>How to play: </strong></p>
-            <button onClick = {context.nextStage}>Start Game!</button>
+            <button onClick={context.nextStage}>Start Game!</button>
         </div>
-      );
+    );
 }
 
 export default IntroOverlay;
