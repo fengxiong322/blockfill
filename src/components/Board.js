@@ -8,6 +8,14 @@ function Board(props) {
   const context = React.useContext(GameContext);
   const [update, setUpdate] = React.useState(false);
 
+  React.useEffect(() => {
+    document.addEventListener('keydown', (e) => {
+      if(e.key === " "){
+        context.nextStage();
+      }
+    });
+  },[]);
+
   document.addEventListener("UPDATE_CELLS", (e) => {
     setUpdate(!update);
   });

@@ -8,6 +8,7 @@ class Game {
         this.selected = [];
         this.board = [];
         this.mouseDown = false;
+        this.timer = 0;
         let index = 0;
         for (let i = 0; i < this.width; ++i) {
             for (let j = 0; j < this.height; ++j) {
@@ -50,7 +51,8 @@ class Game {
             this.board[obstacles[i]].type = BLOCK_TYPE.block;
         }
         this.board[obstacles[numObstacles]].type = BLOCK_TYPE.filled;
-        this.addSelected(obstacles[numObstacles])
+        this.addSelected(obstacles[numObstacles]);
+        this.updateBoard();
     }
 
     playCell(i){

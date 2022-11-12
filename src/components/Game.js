@@ -1,6 +1,7 @@
 import React from 'react';
 import Board from './Board.js'
 import Timer from './Timer.js'
+import Result from './Result.js'
 import IntroOverlay from './IntroOverlay.js'
 import { STAGE } from './../consts/constants'
 import { GameContext } from "../context/GameContext.js"
@@ -12,7 +13,6 @@ function Game() {
     console.log("update");
     console.log(context.stage)
     if (context.stage === STAGE.TIMED.intro) {
-      console.log("Introduction Phase");
       context.setSize({ width: 5, height: 5 });
     } else if (context.stage === STAGE.TIMED.overlay) {
       context.nextStage();
@@ -28,6 +28,9 @@ function Game() {
     } else if (context.stage === STAGE.TIMED.overlay) {
     } else if (context.stage === STAGE.TIMED.start) {
       return <><Timer /><Board /></>
+    } else if (context.stage === STAGE.TIMED.end){
+      console.log("end");
+      return <Result/>
     }
   }
 
