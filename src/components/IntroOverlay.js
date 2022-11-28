@@ -1,4 +1,6 @@
 import React from 'react';
+import './common.css';
+import './IntroOverlay.css';
 import { GameContext } from "../context/GameContext.js"
 
 function IntroOverlay() {

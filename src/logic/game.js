@@ -1,4 +1,4 @@
-import { BLOCK_TYPE, STAGE } from './../consts/constants.js'
+import { BLOCK_TYPE, STAGE, DIRECTION } from './../consts/constants.js'
 import _ from 'lodash'
 
 class Game {
@@ -112,6 +112,33 @@ class Game {
         this.board.map(cur => {
             cur.type = BLOCK_TYPE.empty;
         });
+    }
+
+    getDirection(index1, index2){
+        if(index1 === undefined || index2 === undefined){
+            return DIRECTION.NONE;
+        }
+        let cell1 = this.board[index1];
+        let cell2 = this.board[index2];
+        if(cell1.x === cell2.x){
+            if(cell1.y+1 === cell2.y){
+                return DIRECTION.UP;
+            }else{
+                return DIRECTION.DOWN;
+            }
+        }else {
+            if(cell1.x+1 === cell2.x){
+                return DIRECTION.RIGHT;
+            }else{
+                return DIRECTION.LEFT;
+            }
+        }
+    }
+
+    getAdjacent(i){
+        let pos = this.selected.indexOf(i);
+        return [this.getDirection(this.selected[pos], this.selected[pos-1]),
+                this.getDirection(this.selected[pos], this.selected[pos+1])]
     }
 }
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import './Result.css';
 import { GameContext } from "../context/GameContext.js"
 
 function Result() {
@@ -6,7 +7,9 @@ function Result() {
       
     return (
         <div className = "results">
-            {context.game.timer}
+            <h1>Results</h1>
+            <div>Time Taken: {context.game.timer}</div>
+            <button onClick={context.nextStage}>Continue</button>
         </div>
     );
 }

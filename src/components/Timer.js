@@ -4,24 +4,21 @@ import { GameContext } from "../context/GameContext.js"
 function Timer() {
     const context = React.useContext(GameContext);
     const [time, setTime] = React.useState("");
-    const [startTime, setStartTime] = React.useState("");
+    const startTime = Date.now();
 
     React.useEffect(() => {
-        setStartTime(Date.now());
+        const myVar = setInterval(() => {
+            setTime(Date.now() - startTime);
+        }, 100);
+        return () => {
+            clearInterval(myVar);
+        }
     }, []);
 
     React.useEffect(() => {
         context.game.timer = time;
     }, [time]);
 
-    React.useEffect(() => {
-        clearInterval(myVar);
-    }, [context.stage]);
-
-    const myVar = setInterval(() => {
-        setTime(Date.now() - startTime);
-    }, 100);
-      
     return (
         <div className = "timer">
             {time}

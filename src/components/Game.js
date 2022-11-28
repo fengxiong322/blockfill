@@ -18,6 +18,8 @@ function Game() {
       context.nextStage();
     } else if (context.stage == STAGE.TIMED.start){
       context.game.setRandomObstacles(10);
+    } else if (context.stage == STAGE.TIMED.repeat){
+      context.nextStage();
     }
   }, [context.stage]);
 
@@ -29,7 +31,6 @@ function Game() {
     } else if (context.stage === STAGE.TIMED.start) {
       return <><Timer /><Board /></>
     } else if (context.stage === STAGE.TIMED.end){
-      console.log("end");
       return <Result/>
     }
   }
