@@ -1,6 +1,6 @@
 import { useState, createContext, useEffect } from "react";
-import Game from './../logic/game.js'
-import { STAGE } from './../consts/constants.js'
+import Game from '../logic/game.js'
+import { STAGE } from '../consts/constants.js'
 
 export const GameContext = createContext({
     size: {width: 0, height: 0},

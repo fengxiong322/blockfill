@@ -3,7 +3,7 @@ import Board from './Board.js'
 import Timer from './Timer.js'
 import Result from './Result.js'
 import IntroOverlay from './IntroOverlay.js'
-import { STAGE } from './../consts/constants'
+import { STAGE } from '../consts/constants'
 import { GameContext } from "../context/GameContext.js"
 
 function Game() {

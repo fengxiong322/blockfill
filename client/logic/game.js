@@ -1,4 +1,4 @@
-import { BLOCK_TYPE, STAGE, DIRECTION } from './../consts/constants.js'
+import { BLOCK_TYPE, STAGE, DIRECTION } from '../consts/constants.js'
 import _ from 'lodash'
 
 class Game {
