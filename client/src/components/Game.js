@@ -10,14 +10,12 @@ function Game() {
   const context = React.useContext(GameContext);
 
   React.useEffect(() => {
-    console.log("update");
-    console.log(context.stage)
     if (context.stage === STAGE.TIMED.intro) {
-      context.setSize({ width: 5, height: 5 });
+      context.setSize({ width: 6, height: 6 });
     } else if (context.stage === STAGE.TIMED.overlay) {
       context.nextStage();
     } else if (context.stage == STAGE.TIMED.start){
-      context.game.setRandomObstacles(10);
+      context.game.setFullPath(25);
     } else if (context.stage == STAGE.TIMED.repeat){
       context.nextStage();
     }
