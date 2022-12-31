@@ -1,0 +1,21 @@
+.Cell{
+    border: 1px solid rgb(177, 177, 177);
+}
+
+.filled {
+}
+
+.empty {
+}
+
+.block {
+    border: none;
+    background-color: black;
+}
+
+path {
+    stroke-width: 30;
+    stroke: rgb(5, 143, 120);
+    stroke-linecap: round;
+    fill: none;
+}
