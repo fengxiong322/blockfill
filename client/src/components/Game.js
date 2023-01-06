@@ -5,17 +5,21 @@ import Result from './Result.js'
 import IntroOverlay from './IntroOverlay.js'
 import { STAGE } from '../consts/constants'
 import { GameContext } from "../context/GameContext.js"
+import io from 'socket.io-client';
+import GameState from '../logic/gamestate.js'
+
+const socket = io();
 
 function Game() {
   const context = React.useContext(GameContext);
 
   React.useEffect(() => {
     if (context.stage === STAGE.TIMED.intro) {
-      context.setSize({ width: 6, height: 6 });
     } else if (context.stage === STAGE.TIMED.overlay) {
       context.nextStage();
     } else if (context.stage == STAGE.TIMED.start){
-      context.game.setFullPath(25);
+      context.setGame(new GameState(context.size))
+      socket.emit("requestObstacles", context.size);
     } else if (context.stage == STAGE.TIMED.repeat){
       context.nextStage();
     }
@@ -27,7 +31,7 @@ function Game() {
       return <IntroOverlay />
     } else if (context.stage === STAGE.TIMED.overlay) {
     } else if (context.stage === STAGE.TIMED.start) {
-      return <><Timer /><Board /></>
+      return <><Board /><Timer /></>
     } else if (context.stage === STAGE.TIMED.end){
       return <Result/>
     }

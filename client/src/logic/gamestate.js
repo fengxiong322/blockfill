@@ -1,7 +1,7 @@
 import { BLOCK_TYPE, STAGE, DIRECTION } from '../consts/constants.js'
 import _ from 'lodash'
 
-class Game {
+class GameState {
     constructor(size){
         this.width = size.width;
         this.height = size.height;
@@ -9,6 +9,7 @@ class Game {
         this.board = [];
         this.mouseDown = false;
         this.timer = 0;
+        this.obstaclesCount = 0;
         let index = 0;
         for (let i = 0; i < this.width; ++i) {
             for (let j = 0; j < this.height; ++j) {
@@ -16,7 +17,7 @@ class Game {
                     i: index,
                     x: i,
                     y: j,
-                    type:BLOCK_TYPE.empty});
+                    type: BLOCK_TYPE.empty});
                 index++;
             }   
         }
@@ -36,9 +37,21 @@ class Game {
         this.selected.push(i);
     }
 
+    addObstacles(obstacles){
+        for(var i = 0; i < this.board.length; i++){
+            if(!obstacles[i]){
+                this.board[i].type = BLOCK_TYPE.block;
+                this.obstaclesCount++;
+            }
+        }
+    }
+
+    isFinished(){
+        return this.obstaclesCount + this.selected.length === this.width * this.height
+    }
+
     playCell(i){
         if(this.mouseDown){
-            this.updateBoard();
             let curCell = this.board[i];
             if(curCell.type === BLOCK_TYPE.empty){
                 let head = this.board[this.selected.at(-1)];
@@ -57,6 +70,7 @@ class Game {
                 this.selected = this.selected.splice(0, splitIndex+1);
 
             }
+            this.updateBoard();
         }
     }
 
@@ -121,4 +135,4 @@ class Game {
     }
 }
 
-export default Game;
+export default GameState;

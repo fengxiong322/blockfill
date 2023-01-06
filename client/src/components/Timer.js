@@ -8,7 +8,8 @@ function Timer() {
 
     React.useEffect(() => {
         const myVar = setInterval(() => {
-            setTime(Date.now() - startTime);
+            if(context.game !== null)
+                setTime(Date.now() - startTime);
         }, 100);
         return () => {
             clearInterval(myVar);
@@ -16,7 +17,10 @@ function Timer() {
     }, []);
 
     React.useEffect(() => {
-        context.game.timer = time;
+        if(context.game !== null){
+            context.game.timer = time;
+        }
+            
     }, [time]);
 
     function displayTime () {
