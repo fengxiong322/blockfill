@@ -1,7 +1,7 @@
 import { BLOCK_TYPE, STAGE, DIRECTION } from '../consts/constants.js'
 import _ from 'lodash'
 
-class Game {
+class GameState {
     constructor(size){
         this.width = size.width;
         this.height = size.height;
@@ -9,6 +9,7 @@ class Game {
         this.board = [];
         this.mouseDown = false;
         this.timer = 0;
+        this.obstaclesCount = 0;
         let index = 0;
         for (let i = 0; i < this.width; ++i) {
             for (let j = 0; j < this.height; ++j) {
@@ -16,7 +17,7 @@ class Game {
                     i: index,
                     x: i,
                     y: j,
-                    type:BLOCK_TYPE.empty});
+                    type: BLOCK_TYPE.empty});
                 index++;
             }   
         }
@@ -36,27 +37,21 @@ class Game {
         this.selected.push(i);
     }
 
-    //Setting Obstacles
-    setObstacle(i){
-        if(this.mouseDown){
-            this.updateBoard();
-            this.board[i].type = BLOCK_TYPE.block;
+    addObstacles(obstacles){
+        for(var i = 0; i < this.board.length; i++){
+            if(!obstacles[i]){
+                this.board[i].type = BLOCK_TYPE.block;
+                this.obstaclesCount++;
+            }
         }
     }
 
-    setRandomObstacles(numObstacles){
-        const obstacles = _.shuffle(_.range(this.width*this.height)).slice(0, numObstacles+1);
-        for(let i in obstacles.slice(0, numObstacles)){
-            this.board[obstacles[i]].type = BLOCK_TYPE.block;
-        }
-        this.board[obstacles[numObstacles]].type = BLOCK_TYPE.filled;
-        this.addSelected(obstacles[numObstacles]);
-        this.updateBoard();
+    isFinished(){
+        return this.obstaclesCount + this.selected.length === this.width * this.height
     }
 
     playCell(i){
         if(this.mouseDown){
-            this.updateBoard();
             let curCell = this.board[i];
             if(curCell.type === BLOCK_TYPE.empty){
                 let head = this.board[this.selected.at(-1)];
@@ -75,10 +70,9 @@ class Game {
                 this.selected = this.selected.splice(0, splitIndex+1);
 
             }
+            this.updateBoard();
         }
     }
-
-
 
     update(i, stage){
         if(stage === STAGE.TIMED.play){
@@ -139,42 +133,6 @@ class Game {
         return [this.getDirection(this.selected[pos], this.selected[pos-1]),
                 this.getDirection(this.selected[pos], this.selected[pos+1])]
     }
-
-    setFullPath(length) {
-        const visited = new Array(this.width * this.height).fill(-1);
-        this.setFullPathRecursive(length, {x: 0, y: 0}, visited);
-        this.board[0].type = BLOCK_TYPE.filled;
-        this.addSelected(0);
-        this.updateBoard();
-    }
-
-    setFullPathRecursive(length, current, [...visited]){
-        if (current.x < 0 || current.x >= this.width || current.y < 0 || current.y >= this.height)
-            return false;
-        if(visited[current.x * this.width + current.y] !== -1)
-            return false;
-        visited[current.x * this.width + current.y] = length;
-        const newlength = length - 1;
-        if(newlength === 0){//found our path.
-            for(var i = 0; i < visited.length; i++){
-                if(-1 === visited[i]){
-                    this.board[i].type = BLOCK_TYPE.block;
-                }
-            }
-            return true;
-        }else{
-            const directions = _.shuffle([{x: current.x+1, y: current.y},
-                                          {x: current.x-1, y: current.y},
-                                          {x: current.x, y: current.y+1},
-                                          {x: current.x, y: current.y-1}]);
-            for(var i = 0; i < directions.length; i++){
-                if(this.setFullPathRecursive(length-1, directions[i], visited)){
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
 }
 
-export default Game;
+export default GameState;

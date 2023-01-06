@@ -1,20 +1,40 @@
 import { useState, createContext, useEffect } from "react";
-import Game from '../logic/game.js'
+import GameState from '../logic/gamestate.js'
 import { STAGE } from '../consts/constants.js'
+import io from 'socket.io-client';
+
+const socket = io();
 
 export const GameContext = createContext({
-    size: {width: 0, height: 0},
+    size: {width: 6, height: 6},
     game: null,
     stage: STAGE.TIMED.intro
 });
 
 export const GameContextProvider = ({children}) => {
-    const [size, setSize] = useState({width: 0, height: 0});
-    const [game, setGame] = useState(null);
+    const [size, setSize] = useState({width: 6, height: 6});
+    const [game, setGame] = useState(new GameState(size));
     const [stage, setStage] = useState(STAGE.TIMED.intro);
 
     useEffect(() => {
-        setGame(new Game(size));
+        socket.on('connect', () => {
+            console.log("connected")
+        });
+
+        socket.on('sendObstacles', (obstacles) => {
+            const newGame = new GameState(size);
+            newGame.addObstacles(obstacles)
+            setGame(newGame);
+        })
+    
+        return () => {
+          socket.off('connect');
+          socket.off('sendObstacles');
+        };
+      }, []);
+
+    useEffect(() => {
+        
     }, [size]);
 
     function nextStage(){
@@ -24,7 +44,7 @@ export const GameContextProvider = ({children}) => {
     return (
         <GameContext.Provider value = {{
             size, setSize,
-            game,
+            game, setGame,
             stage, nextStage
         }}>
             {children}

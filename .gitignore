@@ -1,6 +1,7 @@
 node_modules
 package.json
 package-lock.json
+.vscode/
 
 # dependencies
 /node_modules
@@ -11,7 +12,7 @@ package-lock.json
 /coverage
 
 # production
-/build
+client/build
 
 # misc
 .DS_Store
